@@ -1,10 +1,14 @@
 import { useLayoutEffect } from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
+import { FlatList, StyleSheet, Platform } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import HeaderButton from "../components/HeaderButton";
+import PlaceItem from "../components/PlaceItem";
+import { useBoundStore } from "../store/useBoundStore";
 
 const PlacesListScreen = ({ navigation }) => {
+  const places = useBoundStore((state) => state.places);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -21,9 +25,22 @@ const PlacesListScreen = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <View>
-      <Text>PlacesListScreen</Text>
-    </View>
+    <FlatList
+      data={places}
+      renderItem={(itemData) => (
+        <PlaceItem
+          image={null}
+          title={itemData.item.title}
+          address={null}
+          onSelect={() => {
+            navigation.navigate("PlaceDetail", {
+              placeTitle: itemData.item.title,
+              placeId: itemData.item.id,
+            });
+          }}
+        />
+      )}
+    />
   );
 };
 
