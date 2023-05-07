@@ -9,15 +9,21 @@ import {
 } from "react-native";
 
 import Colors from "../constants/Colors";
+import { useBoundStore } from "../store/useBoundStore";
 
-const NewPlaceScreen = (props) => {
+const NewPlaceScreen = ({ navigation }) => {
   const [titleValue, setTitleValue] = useState("");
+
+  const addPlace = useBoundStore((state) => state.addPlace);
 
   const titleChangeHandler = (text) => {
     setTitleValue(text);
   };
 
-  const savePlaceHandler = () => {};
+  const savePlaceHandler = () => {
+    addPlace(titleValue);
+    navigation.goBack();
+  };
 
   return (
     <ScrollView>
