@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { View, Button, Image, Text, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 import Colors from "../constants/Colors";
 
 const ImgPicker = (props) => {
+  const [pickedImage, setPickedImage] = useState();
+
   const takeImageHandler = async () => {
     let permissionResponse = await ImagePicker.getCameraPermissionsAsync();
 
@@ -14,14 +17,25 @@ const ImgPicker = (props) => {
       }
     }
 
-    await ImagePicker.launchCameraAsync();
+    const imagePickerResult = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 0.5,
+    });
+
+    if (!imagePickerResult.canceled) {
+      setPickedImage(imagePickerResult.assets[0].uri);
+    }
   };
 
   return (
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
-        <Text>No image picked yet.</Text>
-        <Image style={styles.image} />
+        {!pickedImage ? (
+          <Text>No image picked yet.</Text>
+        ) : (
+          <Image style={styles.image} source={{ uri: pickedImage }} />
+        )}
       </View>
       <Button
         title="Take image"
