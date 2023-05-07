@@ -24,7 +24,9 @@ const ImgPicker = (props) => {
     });
 
     if (!imagePickerResult.canceled) {
-      setPickedImage(imagePickerResult.assets[0].uri);
+      const imageUri = imagePickerResult.assets[0].uri;
+      setPickedImage(imageUri);
+      props.onImageTaken(imageUri);
     }
   };
 
@@ -49,6 +51,7 @@ const ImgPicker = (props) => {
 const styles = StyleSheet.create({
   imagePicker: {
     alignItems: "center",
+    marginBottom: 15,
   },
   imagePreview: {
     width: "100%",
