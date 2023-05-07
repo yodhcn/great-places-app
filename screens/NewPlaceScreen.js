@@ -10,6 +10,7 @@ import {
 
 import Colors from "../constants/Colors";
 import { useBoundStore } from "../store/useBoundStore";
+import ImgPicker from "../components/ImagePicker";
 
 const NewPlaceScreen = ({ navigation }) => {
   const [titleValue, setTitleValue] = useState("");
@@ -34,6 +35,7 @@ const NewPlaceScreen = ({ navigation }) => {
           value={titleValue}
           onChangeText={titleChangeHandler}
         />
+        <ImgPicker />
         <Button
           title="Save Place"
           color={Colors.primary}
