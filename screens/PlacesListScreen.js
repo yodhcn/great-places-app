@@ -1,6 +1,7 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useCallback } from "react";
 import { FlatList, StyleSheet, Platform } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { useFocusEffect } from "@react-navigation/native";
 
 import HeaderButton from "../components/HeaderButton";
 import PlaceItem from "../components/PlaceItem";
@@ -8,6 +9,7 @@ import { useBoundStore } from "../store/useBoundStore";
 
 const PlacesListScreen = ({ navigation }) => {
   const places = useBoundStore((state) => state.places);
+  const loadPlaces = useBoundStore((state) => state.loadPlaces);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,6 +25,12 @@ const PlacesListScreen = ({ navigation }) => {
       ),
     });
   }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadPlaces();
+    }, [loadPlaces])
+  );
 
   return (
     <FlatList

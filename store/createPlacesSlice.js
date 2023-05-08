@@ -1,6 +1,6 @@
 import Place from "../models/place";
 import * as FileSystem from "expo-file-system";
-import { insertPlace } from "../helpers/db";
+import { insertPlace, fetchPlaces } from "../helpers/db";
 
 export const createPlacesSlice = (set) => ({
   places: [],
@@ -23,6 +23,20 @@ export const createPlacesSlice = (set) => ({
       const newPlace = new Place(dbResult.insertId, title, newPath);
       set((state) => {
         state.places.push(newPlace);
+      });
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  loadPlaces: async () => {
+    try {
+      const dbResult = await fetchPlaces();
+      set((state) => {
+        state.places = dbResult.rows._array.map(
+          ({ id, title, imageUri, address, lat, lng }) =>
+            new Place(id, title, imageUri)
+        );
       });
     } catch (err) {
       console.log(err);
