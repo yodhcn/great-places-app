@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   ScrollView,
   View,
@@ -23,9 +23,9 @@ const NewPlaceScreen = ({ navigation }) => {
     setTitleValue(text);
   };
 
-  const imageTakenHandler = (imagePath) => {
+  const imageTakenHandler = useCallback((imagePath) => {
     setSelectedImage(imagePath);
-  };
+  }, []);
 
   const savePlaceHandler = () => {
     addPlace(titleValue, selectedImage);
