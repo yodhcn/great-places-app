@@ -6,10 +6,12 @@ import {
   ActivityIndicator,
   Alert,
   StyleSheet,
+  Image,
 } from "react-native";
 import * as Location from "expo-location";
 
 import Colors from "../constants/Colors";
+import MapPreview from "./MapPreview";
 
 // https://stackoverflow.com/questions/76056019/timeout-function-on-location-getcurrentpositionasync-doesnt-timeout
 const asyncCallWithTimeout = async (asyncPromise, timeLimit) => {
@@ -44,6 +46,7 @@ const LocationPicker = (props) => {
 
     try {
       setIsFetching(true);
+      setPickedLocation(null);
       const location = await asyncCallWithTimeout(
         Location.getCurrentPositionAsync({}),
         5000
@@ -58,19 +61,24 @@ const LocationPicker = (props) => {
         "Could not fetch location!",
         "Please try again later or pick a location on the map."
       );
+      // default location
+      setPickedLocation({
+        lat: 39.990464,
+        lng: 116.481485,
+      });
     }
     setIsFetching(false);
   };
 
   return (
     <View style={styles.locationPicker}>
-      <View style={styles.mapPreview}>
+      <MapPreview style={styles.mapPreview} location={pickedLocation}>
         {isFetching ? (
           <ActivityIndicator size="large" color={Colors.primary} />
         ) : (
           <Text>No location chosen yet!</Text>
         )}
-      </View>
+      </MapPreview>
       <Button
         title="Get User Location"
         color={Colors.primary}
